@@ -1,0 +1,4 @@
+caption button,
+.modal-dialog .modal-footer button {
+  min-width: 100px;
+}

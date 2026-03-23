@@ -1,0 +1,411 @@
+<!-- Books -->
+<div class="container">
+  <div class="row justify-content-center px-2 px-sm-0">
+    <div class="overflow-x-auto border shadow p-0 my-5">
+
+      <!-- Table -->
+      <table class="table table-bordered table-striped
+                    table-hover table-responsive m-0">
+
+        <!-- Caption -->
+        <caption class="caption-top bg-dark-subtle">
+          <div class="d-flex justify-content-between">
+            <h4 class="mb-0 p-2">
+              <i class="fa-solid fa-book me-1"></i>
+              KINÁLATUNK
+            </h4>
+            <button class="btn btn-sm me-3 my-1 btn-primary"
+                    ng-click="openModal(null, 'new')">
+              <i class="fa-solid fa-circle-plus"></i>
+              Felvétel
+            </button>
+          </div>
+        </caption>
+
+        <!-- Thead -->
+        <thead class="table-dark">
+          <tr>
+            <th class="text-center">#</th>
+            <th ng-repeat="(k, v) in header track by $index"
+                ng-class="{'text-center': k==='id' || k==='publicated'}">
+              {{ v }}
+            </th>
+            <th class="text-center text-nowrap" 
+                style="width: 170px;">
+              Műveletek
+            </th>
+          </tr>
+        </thead>
+
+        <!-- Tbody -->
+        <tbody>
+
+          <!-- Books -->
+          <tr class="align-middle"
+              ng-if="$root.data.books.length"
+              ng-repeat="book in filteredBooks = 
+                        ($root.data.books | filter:booksFilter) 
+                         track by $index"
+              ng-dblclick="openModal(book, 'modify')">
+            <td class="text-end">{{ $index + 1 }}</td>
+            <td ng-repeat="(k, v) in header track by $index"
+                ng-class="{'text-end': k==='id',
+                           'text-center': k==='publicated'}">
+              {{ book[k] }}
+            </td>
+
+            <!-- Buttons -->
+            <td>
+
+              <!-- Details -->
+              <button class="btn btn-sm mx-1 my-1 btn-info text-white"
+                      ng-click="openModal(book, 'details')"
+                      title="Részletek"
+                      data-bs-toggle="tooltip" 
+                      data-bs-title="Részletek">
+                <i class="fa-solid fa-book-open"></i>
+              </button>
+
+              <!-- Modify -->
+              <button class="btn btn-sm mx-1 my-1 btn-success"
+                      ng-click="openModal(book, 'modify')"
+                      title="Módosít"
+                      data-bs-toggle="tooltip" 
+                      data-bs-title="Módosít">
+                <i class="fa-solid fa-file-pen"></i>
+              </button>
+
+              <!-- Delete -->
+              <button class="btn btn-sm mx-1 my-1 btn-danger"
+                      ng-click="delete(book.id, book.name)"
+                      title="Törlés"
+                      data-bs-toggle="tooltip" 
+                      data-bs-title="Törlés">
+                <i class="fa-solid fa-circle-xmark"></i>
+              </button>
+            </td>
+          </tr>
+
+          <!-- Empty -->
+          <tr class="align-middle"
+              ng-if="!$root.data.books.length || 
+                     !filteredBooks.length">
+            <td class="text-center"
+                colspan="{{ headerLength + 2 }}">
+              <span ng-if="!$root.data.books.length">
+                Üres!
+              </span>
+              <span ng-if="$root.data.books.length && !filteredBooks.length">
+                <span>Nincs adat! SZŰRŐ: </span>
+                <span class="text-danger fw-bold ms-3">
+                  {{ header[$root.filter.key] }}: '{{ $root.filter.search }}'</span>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Offcanvas filter -->
+<div class="offcanvas offcanvas-end" 
+     tabindex="-1" 
+     id="offcanvasFilter" 
+     aria-labelledby="offcanvasFilterLabel">
+  <div class="offcanvas-header">
+    <img src="./assets/image/logos/filter.png" height="100">
+    <button type="button" 
+            class="btn-close" 
+            data-bs-dismiss="offcanvas" 
+            aria-label="Close"></button>
+  </div>
+
+  <!-- Form -->
+  <div class="offcanvas-body">
+    <form name="filterForm">
+
+      <!-- Search (filter) -->
+      <div class="mb-4">
+        <label for="search" 
+               class="form-label">
+          <i class="fa-solid fa-filter me-1"></i>
+          Szelekció:
+        </label>
+        <input type="search" 
+               class="form-control"
+               autocomplete="off"
+               spellcheck="false"
+               placeholder="szelekció" 
+               id="search"
+               name="search"
+               ng-model="$root.filter.search">
+      </div>
+      <hr>
+
+      <!-- Name -->
+      <div class="form-check">
+        <input class="form-check-input" 
+               type="radio" 
+               name="filter" 
+               id="name"
+               value="name" 
+               ng-model="$root.filter.key">
+        <label class="form-check-label" 
+               for="name">
+          Név
+        </label>
+      </div>
+
+      <!-- Genre name -->
+      <div class="form-check">
+        <input class="form-check-input" 
+               type="radio" 
+               name="filter" 
+               id="genre_name"
+               value="genre_name"
+               ng-model="$root.filter.key">
+        <label class="form-check-label" 
+               for="genre_name">
+          Műfaj
+        </label>
+      </div>
+
+      <!-- Author -->
+      <div class="form-check">
+        <input class="form-check-input" 
+               type="radio" 
+               name="filter"
+               value="author" 
+               id="author"
+               ng-model="$root.filter.key">
+        <label class="form-check-label" 
+               for="author">
+          Szerző
+        </label>
+      </div>
+
+      <!-- Publicated -->
+      <div class="form-check">
+        <input class="form-check-input" 
+               type="radio" 
+               name="filter" 
+               id="publicated"
+               value="publicated"
+               ng-model="$root.filter.key">
+        <label class="form-check-label" 
+               for="publicated">
+          Kiadás éve
+        </label>
+      </div>
+
+      <!-- Description -->
+      <div class="form-check">
+        <input class="form-check-input" 
+               type="radio" 
+               name="filter" 
+               id="description"
+               value="description"
+               ng-model="$root.filter.key">
+        <label class="form-check-label" 
+               for="description">
+          Leírás
+        </label>
+      </div>
+      <hr>
+    </form>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" 
+     id="bookModal" 
+     data-bs-backdrop="static" 
+     data-bs-keyboard="false" 
+     tabindex="-1" 
+     aria-labelledby="bookModalLabel" 
+     aria-hidden="true">
+  <div class="modal-dialog 
+              modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <!-- Header -->
+      <div class="modal-header">
+        <h3 class="modal-title fs-5" 
+            id="bookModalLabel"
+            ng-switch="modalType">
+          <span ng-switch-when="modify">
+            MÓDOSÍT
+          </span>
+          <span ng-switch-when="details">
+            RÉSZLETEK
+          </span>
+          <span ng-switch-when="new">
+            FELVÉTEL
+          </span>
+        </h3>
+        <button type="button" 
+                class="btn-close" 
+                data-bs-dismiss="modal" 
+                aria-label="Close"></button>
+      </div>
+
+      <!-- Form -->
+      <div class="modal-body">
+        <form name="bookForm">
+
+          <!-- Identifier -->
+          <div class="row mb-3 align-items-center">
+            <label for="id" 
+                   class="col-3 form-label">
+              Azonosító:
+            </label>
+            <div class="col-9">
+              <input type="number" 
+                     class="form-control"
+                     autocomplete="off" 
+                     id="id"
+                     name="id"
+                     ng-model="model.id" 
+                     disabled
+                     style="width: 100px;">
+            </div>
+          </div>
+
+          <!-- Name -->
+          <div class="mb-3">
+            <label for="name" 
+                   class="form-label">
+              Név:
+            </label>
+            <input type="text" 
+                   class="form-control" 
+                   autocomplete="off" 
+                   spellcheck="false"
+                   placeholder="név"
+                   ng-model="model.name"
+                   id="name" 
+                   name="name"
+                   ng-model="model.name"
+                   ng-pattern="/^(?=(?:.*[^ ]){2,}).*$/"
+                   required
+                   ng-disabled="modalType === 'details'">
+          </div>
+
+          <!-- Genre -->
+          <div class="mb-3">
+            <label for="genre_id" 
+                   class="form-label">
+              Műfaj:
+            </label>
+            <select class="form-select"
+                    ng-options="genre.id as genre.name for genre in $root.data.genres"
+                    id="genre_id"
+                    name="genre_id"
+                    ng-model="model.genre_id"
+                    required
+                    ng-disabled="modalType === 'details'">
+              <option value=""
+                      selected 
+                      hidden>
+                -- Kérem válasszon --
+              </option>
+            </select>
+          </div>
+
+          <!-- Author -->
+          <div class="mb-3">
+            <label for="author" 
+                   class="form-label">
+              Szerző:
+            </label>
+            <input type="text" 
+                   class="form-control" 
+                   autocomplete="off"
+                   spellcheck="false"
+                   placeholder="szerző"
+                   id="author"
+                   name="author"
+                   ng-model="model.author"
+                   ng-pattern="/^(?=(?:.*[^ ]){2,}).*$/"
+                   required
+                   ng-disabled="modalType === 'details'">
+          </div>
+
+          <!-- Publicated -->
+          <div class="row mb-3 align-items-center">
+            <label for="publicated" 
+                   class="col-3 form-label">
+              Kiadás éve:
+            </label>
+            <div class="col-9">
+              <input type="text" 
+                     class="form-control"
+                     autocomplete="off" 
+                     spellcheck="false" 
+                     id="publicated"
+                     name="publicated"
+                     ng-model="model.publicated" 
+                     ng-pattern="/^[1-9][0-9]{3}$/"
+                     maxlength="4" 
+                     required
+                     placeholder="kiadva"
+                     style="width: 100px;"
+                     ng-disabled="modalType === 'details'">
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-3">
+            <label for="description" 
+                   class="form-label">
+              Leírás:
+            </label>
+            <textarea class="form-control"
+                      autocomplete="off" 
+                      spellcheck="false"
+                      placeholder="Leírás" 
+                      id="description"
+                      name="description"
+                      ng-model="model.description"
+                      ng-pattern="/^(?=(?:.*[^ ]){2,}).*$/" 
+                      rows="3" 
+                      required
+                      ng-disabled="modalType === 'details'">
+            </textarea>
+          </div>
+        </form>
+      </div>
+
+      <!-- Buttons -->
+      <div class="modal-footer">
+
+        <!-- Ok/Cancel -->
+        <button type="button" 
+                class="btn btn-secondary mx-1" 
+                data-bs-dismiss="modal"
+                ng-switch="modalType">
+          <i class="fa-solid fa-circle-xmark"></i>
+          <span ng-switch-when="details">
+            Bezár
+          </span>
+          <span ng-switch-default>
+            Mégsem
+          </span>
+        </button>
+        
+        <!-- Save -->
+        <button id="btn-save"
+                type="button" 
+                class="btn btn-primary mx-1"
+                data-bs-dismiss="modal"
+                ng-disabled="bookForm.$invalid"
+                ng-click="modalType === 'new' ? post(model) : put(model)"
+                ng-if="modalType !== 'details'">
+          <i class="fa-solid fa-floppy-disk"></i>
+          Mentés
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
