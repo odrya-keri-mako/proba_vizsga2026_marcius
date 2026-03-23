@@ -10,6 +10,9 @@
     '$scope',
     function($rootScope, $scope) {
 
+      // Get last choice theme
+      $rootScope.theme = localStorage.getItem('keri_library_theme') ?? 'dark';
+      
       // Toggle theme, and save
       $scope.toggleTheme = () => {
         $rootScope.theme = $rootScope.theme === 'dark' ? 'light' : 'dark';

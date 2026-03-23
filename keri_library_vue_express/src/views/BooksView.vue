@@ -5,183 +5,425 @@
   }
 </style>
 <template>
-  <div class="d-flex align-items-center 
-              justify-content-between flex-wrap gap-2 mb-3">
-    <div>
-      <h1 class="h4 fw-semibold mb-0">Könyvek</h1>
-      <div class="text-secondary small">CRUD + MySQL + REST API</div>
-    </div>
 
-    <button class="btn btn-primary" @click="openNew">
-      <i class="fa-solid fa-plus me-2"></i>Új könyv
-    </button>
-  </div>
+  <!-- Books -->
+  <div class="container">
+    <div class="row justify-content-center px-2 px-sm-0">
+      <div class="overflow-x-auto border shadow p-0 my-5">
 
-  <div class="row g-2 mb-3">
-    <div class="col-12 col-md-6">
-      <input v-model="filter" 
-             class="form-control" 
-             placeholder="Keresés név/szerző alapján..." />
-    </div>
-    <div class="col-12 col-md-6">
-      <select v-model="genreFilter" class="form-select">
-        <option value="">Minden műfaj</option>
-        <option v-for="g in genres" 
-                :key="g.id" 
-                :value="String(g.id)">
-          {{ g.name }}
-        </option>
-      </select>
-    </div>
-  </div>
+        <!-- Table -->
+        <table class="table table-bordered table-striped
+                      table-hover table-responsive m-0">
 
-  <!-- Desktop: táblázat -->
-  <div class="card d-none d-md-block">
-    <div class="table-responsive">
-      <table class="table align-middle mb-0">
-        <thead>
-          <tr>
-            <th>Azon.</th>
-            <th>Név</th>
-            <th>Műfaj</th>
-            <th>Szerző</th>
-            <th>Kiadva</th>
-            <th class="text-end">Műveletek</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="b in filteredBooks" :key="b.id">
-            <td>{{ String(b.id).padStart(2,'0') }}</td>
-            <td class="fw-semibold">{{ b.name }}</td>
-            <td>{{ b.genre_name }}</td>
-            <td>{{ b.author }}</td>
-            <td>{{ b.publicated }}</td>
-            <td class="text-end">
-              <div class="btn-group">
-                <button class="btn btn-sm btn-outline-secondary" 
-                        @click="openDetails(b)">
-                  <i class="fa-solid fa-circle-info me-1"></i>
-                  Részletek
+          <!-- Caption -->
+          <caption class="caption-top bg-dark-subtle">
+            <div class="d-flex justify-content-between">
+              <h4 class="mb-0 p-2">
+                <i class="fa-solid fa-book me-1"></i>
+                KINÁLATUNK
+              </h4>
+              <button class="btn btn-sm me-3 my-1 btn-primary"
+                      @click.prevent="openNew">
+                <i class="fa-solid fa-circle-plus"></i>
+                Felvétel
+              </button>
+            </div>
+          </caption>
+
+          <!-- Thead -->
+          <thead class="table-dark">
+            <tr>
+              <th class="text-center">#</th>
+              <th class="text-center">Azon.</th>
+              <th>Név</th>
+              <th>Műfaj</th>
+              <th>Szerző</th>
+              <th class="text-center">Kiadva</th>
+              <th class="text-center">Műveletek</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(b, i) in filteredBooks" :key="b.id">
+              <td class="text-end">{{ i + 1 }}</td>
+              <td class="text-end">{{ b.id }}</td>
+              <td class="fw-semibold">{{ b.name }}</td>
+              <td>{{ b.genre_name }}</td>
+              <td>{{ b.author }}</td>
+              <td class="text-center">{{ b.publicated }}</td>
+
+              <!-- Buttons -->
+              <td class="text-center">
+
+                <!-- Details -->
+                <button class="btn btn-sm mx-1 my-1 btn-info text-white"
+                        @click="openDetails(b)"
+                        title="Részletek"
+                        data-bs-toggle="tooltip" 
+                        data-bs-title="Részletek">
+                  <i class="fa-solid fa-book-open"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-primary" 
-                        @click="openEdit(b)">
-                  <i class="fa-solid fa-pen-to-square me-1"></i>
-                  Módosít
+
+                <!-- Modify -->
+                <button class="btn btn-sm mx-1 my-1 btn-success"
+                        @click="openEdit(b)"
+                        title="Módosít"
+                        data-bs-toggle="tooltip" 
+                        data-bs-title="Módosít">
+                  <i class="fa-solid fa-file-pen"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-danger" 
-                        @click="remove(b)">
-                  <i class="fa-solid fa-trash me-1"></i>
-                  Töröl
+
+                <!-- Delete -->
+                <button class="btn btn-sm mx-1 my-1 btn-danger"
+                        @click="remove(b)"
+                        title="Törlés"
+                        data-bs-toggle="tooltip" 
+                        data-bs-title="Törlés">
+                  <i class="fa-solid fa-circle-xmark"></i>
                 </button>
-              </div>
-            </td>
-          </tr>
+              </td>
+            </tr>
 
-          <tr v-if="filteredBooks.length === 0">
-            <td colspan="6" class="text-secondary">Nincs találat.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Mobile: kártyák -->
-  <div class="d-md-none">
-    <div v-for="b in filteredBooks" :key="b.id" class="card mb-2">
-      <div class="card-body">
-        <div class="small text-secondary">{{ b.genre_name }}</div>
-        <div class="fw-semibold">{{ b.name }}</div>
-        <div class="text-secondary">{{ b.author }} ({{ b.publicated }})</div>
-
-        <div class="d-flex gap-2 mt-3">
-          <button class="btn btn-sm btn-outline-secondary" @click="openDetails(b)"><i class="fa-solid fa-circle-info me-1"></i>Részletek</button>
-          <button class="btn btn-sm btn-outline-primary" @click="openEdit(b)"><i class="fa-solid fa-pen-to-square me-1"></i>Módosít</button>
-          <button class="btn btn-sm btn-outline-danger" @click="remove(b)"><i class="fa-solid fa-trash me-1"></i>Töröl</button>
-        </div>
+            <tr v-if="filteredBooks.length === 0">
+              <td colspan="7" class="text-secondary">
+                Üres
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+    </div>
+  </div>
+
+  <!-- Offcanvas filter -->
+  <div class="offcanvas offcanvas-end" 
+       tabindex="-1"
+       id="offcanvasFilter"
+       data-bs-backdrop="false"
+       aria-labelledby="offcanvasFilterLabel">
+
+    <!-- Header -->
+    <div class="offcanvas-header">
+      <img src="/src/assets/image/logos/filter.png" height="100">
+      <button type="button" 
+              class="btn-close" 
+              data-bs-dismiss="offcanvas" 
+              aria-label="Close"></button>
+    </div>
+
+    <!-- Form -->
+    <div class="offcanvas-body">
+      <form name="filterForm">
+
+        <!-- Search (filter) -->
+        <div class="mb-4">
+          <label for="search" 
+                class="form-label">
+            <i class="fa-solid fa-filter me-1"></i>
+            Szelekció:
+          </label>
+          <input type="search" 
+                class="form-control"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="szelekció" 
+                id="search"
+                name="search"
+                v-model="filter.search">
+        </div>
+        <hr>
+
+        <!-- Name -->
+        <div class="form-check">
+          <input class="form-check-input" 
+                type="radio" 
+                name="filter" 
+                id="name"
+                value="name" 
+                v-model="filter.key">
+          <label class="form-check-label" 
+                for="name">
+            Név
+          </label>
+        </div>
+
+        <!-- Genre name -->
+        <div class="form-check">
+          <input class="form-check-input" 
+                type="radio" 
+                name="filter" 
+                id="genre_name"
+                value="genre_name"
+                v-model="filter.key">
+          <label class="form-check-label" 
+                for="genre_name">
+            Műfaj
+          </label>
+        </div>
+
+        <!-- Author -->
+        <div class="form-check">
+          <input class="form-check-input" 
+                type="radio" 
+                name="filter"
+                value="author" 
+                id="author"
+                v-model="filter.key">
+          <label class="form-check-label" 
+                for="author">
+            Szerző
+          </label>
+        </div>
+
+        <!-- Publicated -->
+        <div class="form-check">
+          <input class="form-check-input" 
+                type="radio" 
+                name="filter" 
+                id="publicated"
+                value="publicated"
+                v-model="filter.key">
+          <label class="form-check-label" 
+                for="publicated">
+            Kiadás éve
+          </label>
+        </div>
+
+        <!-- Description -->
+        <div class="form-check">
+          <input class="form-check-input" 
+                type="radio" 
+                name="filter" 
+                id="description"
+                value="description"
+                v-model="filter.key">
+          <label class="form-check-label" 
+                for="description">
+            Leírás
+          </label>
+        </div>
+        <hr>
+      </form>
     </div>
   </div>
 
   <!-- Modal -->
-  <div class="modal fade" id="bookModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+  <div class="modal fade" 
+      id="bookModal" 
+      data-bs-backdrop="static" 
+      data-bs-keyboard="false" 
+      tabindex="-1" 
+      aria-labelledby="bookModalLabel" 
+      aria-hidden="true">
+    <div class="modal-dialog 
+                modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
+
+        <!-- Header -->
         <div class="modal-header">
-          <h5 class="modal-title">{{ modalTitle }}</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Bezár"></button>
+          <h3 class="modal-title fs-5" 
+              id="bookModalLabel">
+            <span v-if="modalType==='modify'">
+              MÓDOSÍT
+            </span>
+            <span v-if="modalType==='details'">
+              RÉSZLETEK
+            </span>
+            <span v-if="modalType==='new'">
+              FELVÉTEL
+            </span>
+          </h3>
+          <button type="button" 
+                  class="btn-close" 
+                  data-bs-dismiss="modal" 
+                  aria-label="Close"></button>
         </div>
 
-        <form @submit.prevent="save">
-          <div class="modal-body">
-            <div v-if="error" class="alert alert-danger">{{ error }}</div>
+        <!-- Form -->
+        <div class="modal-body">
+          <form name="bookForm">
 
-            <div class="row g-3">
-              <div class="col-12">
-                <label class="form-label">Név</label>
-                <input v-model="model.name" class="form-control" :disabled="readonly" required pattern="^(?=(?:.*[^ ]){2,}).*$" />
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label">Szerző</label>
-                <input v-model="model.author" class="form-control" :disabled="readonly" required pattern="^(?=(?:.*[^ ]){2,}).*$" />
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label">Műfaj</label>
-                <select v-model="model.genre_id" class="form-select" :disabled="readonly" required>
-                  <option value="" disabled>Válassz...</option>
-                  <option v-for="g in genres" :key="g.id" :value="g.id">{{ g.name }}</option>
-                </select>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label">Kiadva (év)</label>
-                <input v-model="model.publicated" class="form-control" :disabled="readonly" required pattern="\\d{4}" />
-              </div>
-
-              <div class="col-12">
-                <label class="form-label">Rövid leírás</label>
-                <textarea v-model="model.description" class="form-control" :disabled="readonly" required pattern="^(?=(?:.*[^ ]){2,}).*$" rows="4"></textarea>
+            <!-- Identifier -->
+            <div class="row mb-3 align-items-center">
+              <label for="id" 
+                    class="col-3 form-label">
+                Azonosító:
+              </label>
+              <div class="col-9">
+                <input type="number" 
+                      class="form-control"
+                      autocomplete="off" 
+                      id="id"
+                      name="id"
+                      v-model="model.id" 
+                      disabled
+                      style="width: 100px;">
               </div>
             </div>
-          </div>
 
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Mégse</button>
-            <button v-if="!readonly" type="submit" class="btn btn-primary">Mentés</button>
-          </div>
-        </form>
+            <!-- Name -->
+            <div class="mb-3">
+              <label for="name" 
+                    class="form-label">
+                Név:
+              </label>
+              <input type="text" 
+                     class="form-control" 
+                     autocomplete="off" 
+                     spellcheck="false"
+                     placeholder="név"
+                     v-model="model.name"
+                     id="name" 
+                     name="name"
+                     pattern="/^(?=(?:.*[^ ]){2,}).*$/"
+                     required
+                     :disabled="modalType === 'details'">
+            </div>
+
+            <!-- Genre -->
+            <div class="mb-3">
+              <label for="genre_id" 
+                    class="form-label">
+                Műfaj:
+              </label>
+              <select class="form-select">
+                <option value="">-- Kérem válasszon --</option>
+                <option v-for="g in genres" 
+                        :key="g.id" 
+                        :value="String(g.id)">
+                  {{ g.name }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Author -->
+            <div class="mb-3">
+              <label for="author" 
+                    class="form-label">
+                Szerző:
+              </label>
+              <input type="text" 
+                    class="form-control" 
+                    autocomplete="off"
+                    spellcheck="false"
+                    placeholder="szerző"
+                    id="author"
+                    name="author"
+                    v-model="model.author"
+                    pattern="/^(?=(?:.*[^ ]){2,}).*$/"
+                    required
+                    :disabled="modalType === 'details'">
+            </div>
+
+            <!-- Publicated -->
+            <div class="row mb-3 align-items-center">
+              <label for="publicated" 
+                    class="col-3 form-label">
+                Kiadás éve:
+              </label>
+              <div class="col-9">
+                <input type="text" 
+                      class="form-control"
+                      autocomplete="off" 
+                      spellcheck="false" 
+                      id="publicated"
+                      name="publicated"
+                      v-model="model.publicated" 
+                      pattern="/^[1-9][0-9]{3}$/"
+                      maxlength="4" 
+                      required
+                      placeholder="kiadva"
+                      style="width: 100px;"
+                      :disabled="modalType === 'details'">
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+              <label for="description" 
+                    class="form-label">
+                Leírás:
+              </label>
+              <textarea class="form-control"
+                        autocomplete="off" 
+                        spellcheck="false"
+                        placeholder="Leírás" 
+                        id="description"
+                        name="description"
+                        v-model="model.description"
+                        pattern="/^(?=(?:.*[^ ]){2,}).*$/" 
+                        rows="3" 
+                        required
+                        :disabled="modalType === 'details'">
+              </textarea>
+            </div>
+          </form>
+        </div>
+
+        <!-- Buttons -->
+        <div class="modal-footer">
+
+          <!-- Ok/Cancel -->
+          <button type="button" 
+                  class="btn btn-secondary mx-1" 
+                  data-bs-dismiss="modal">
+            <i class="fa-solid fa-circle-xmark"></i>
+            <span v-if="modalType === 'details'">
+              Bezár
+            </span>
+            <span v-if="modalType === 'new' || modalType === 'modify'">
+              Mégsem
+            </span>
+          </button>
+          
+          <!-- Save -->
+          <button id="btn-save"
+                  type="button" 
+                  class="btn btn-primary mx-1"
+                  data-bs-dismiss="modal"
+                  @click.prevent="modalType === 'new' ? post(model) : put(model)"
+                  v-if="modalType !== 'details'">
+            <i class="fa-solid fa-floppy-disk"></i>
+            Mentés
+          </button>
+        </div>
       </div>
     </div>
   </div>
+  
 </template>
 
 <script setup>
 import { computed, onMounted, ref } from "vue";
+import { Modal, Offcanvas } from "bootstrap";
 import { api } from "../services/api";
-
-// bootstrap modal (JS import already in main.js)
-let modalInstance = null;
+import { libraryStore } from "../stores/libraryStore";
 
 const books = ref([]);
 const genres = ref([]);
 
-const filter = ref("");
-const genreFilter = ref("");
+// ⬇️ közös filter
+const filter = libraryStore.filter;
 
+// modal állapot
+let modalInstance = null;
 const modalTitle = ref("");
 const readonly = ref(false);
 const error = ref("");
 
-const modelDefault = { id: null, name: "", genre_id: "", author: "", publicated: "", description: "" };
+const modelDefault = {
+  id: null,
+  name: "",
+  genre_id: "",
+  author: "",
+  publicated: "",
+  description: "",
+};
 const model = ref({ ...modelDefault });
+const modalType = ref("new");
 
 function openModal() {
   const el = document.getElementById("bookModal");
-  if (!modalInstance) {
-    // global bootstrap object available because of import "bootstrap"
-    modalInstance = new window.bootstrap.Modal(el, { keyboard: false });
-  }
+  modalInstance = Modal.getOrCreateInstance(el, { keyboard: false });
   error.value = "";
   modalInstance.show();
 }
@@ -190,13 +432,15 @@ function openNew() {
   modalTitle.value = "FELVÉTEL";
   readonly.value = false;
   model.value = { ...modelDefault };
+  modalType.value = 'new';
   openModal();
 }
 
 function openEdit(b) {
   modalTitle.value = "MÓDOSÍT";
   readonly.value = false;
-  model.value = { ...b }; // includes genre_id
+  model.value = { ...b };
+  modalType.value = 'modify';
   openModal();
 }
 
@@ -204,17 +448,27 @@ function openDetails(b) {
   modalTitle.value = "RÉSZLETEK";
   readonly.value = true;
   model.value = { ...b };
+  modalType.value = 'details';
   openModal();
 }
 
-const filteredBooks = computed(() => {
-  const q = filter.value.trim().toLowerCase();
-  const g = genreFilter.value;
+// Offcanvas példány (ha pl. bezárnád mentés után)
+let offcanvasInstance = null;
+function closeOffcanvas() {
+  const el = document.getElementById("offcanvasFilter");
+  offcanvasInstance = Offcanvas.getOrCreateInstance(el);
+  offcanvasInstance.hide();
+}
 
-  return books.value.filter(b => {
-    const matchText = !q || (b.name?.toLowerCase().includes(q) || b.author?.toLowerCase().includes(q));
-    const matchGenre = !g || String(b.genre_id) === g;
-    return matchText && matchGenre;
+const filteredBooks = computed(() => {
+  const q = filter.search.trim().toLowerCase();
+  const key = filter.key;
+
+  if (!q) return books.value;
+
+  return books.value.filter((b) => {
+    const val = String(b[key] ?? "").toLowerCase();
+    return val.includes(q);
   });
 });
 
@@ -222,46 +476,20 @@ async function loadInit() {
   const r = await api.get("/api/init");
   books.value = r.data.books;
   genres.value = r.data.genres;
+
+  // opcionális: store-be is kiírhatod
+  libraryStore.books = books.value;
+  libraryStore.genres = genres.value;
 }
 
-async function save() {
-  try {
-    error.value = "";
-    const payload = {
-      name: model.value.name,
-      author: model.value.author,
-      genre_id: Number(model.value.genre_id),
-      publicated: String(model.value.publicated),
-      description: model.value.description,
-    };
-
-    if (!model.value.id) {
-      const r = await api.post("/api/books", payload);
-      books.value = r.data;
-      alert("A könyvet sikerült felvenni!");
-    } else {
-      const r = await api.put(`/api/books/${model.value.id}`, payload);
-      books.value = r.data;
-      alert("A könyv módosítása megtörtént!");
-    }
-
-    modalInstance.hide();
-  } catch (e) {
-    error.value = e?.response?.data?.error || "Hiba történt mentés közben.";
-  }
-}
-
-async function remove(b) {
-  if (!confirm(`${b.name}\nBiztosan törlöd?`)) return;
-
-  try {
-    const r = await api.delete(`/api/books/${b.id}`);
-    books.value = r.data;
-    alert("A könyvet töröltük!");
-  } catch (e) {
-    alert(e?.response?.data?.error || "Hiba történt törlés közben.");
-  }
-}
+// Remove focus warring when modal close
+setTimeout(() => {
+  const modalElement = document.querySelector('#bookModal');
+  modalElement.addEventListener('hide.bs.modal', () => {
+      if (document.activeElement instanceof HTMLElement)
+        document.activeElement.blur();
+  });
+}, 600)
 
 onMounted(loadInit);
 </script>

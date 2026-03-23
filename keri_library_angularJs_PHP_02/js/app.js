@@ -76,9 +76,6 @@
     'http',
     function($rootScope, $transitions, $timeout, $css, http) {
 
-      // Get last choice theme
-      $rootScope.theme = localStorage.getItem('keri_library_theme') ?? 'dark';
-
       // Set model for filter
       $rootScope.filter = {
         search: '',
