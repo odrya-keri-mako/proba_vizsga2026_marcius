@@ -21,28 +21,3 @@ body[data-bs-theme="light"] .nav-item:hover {
 .bg-dark-transparent {
   background-color:rgba(0,0,0,.3);
 }
-.parallax {
-  min-height: 600px; 
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-.parallax-content {
-  color: white !important;
-  opacity: 0;
-  transform: translateX(0);
-  transition: transform 600ms ease, 
-              opacity 300ms ease;
-  will-change: transform, opacity;
-}
-.parallax-content.from-left  { transform: translateX(-300px); }
-.parallax-content.from-right { transform: translateX( 300px); }
-.parallax-content.show {
-  opacity: 1;
-  transform: translateX(0);
-}
-caption button,
-.modal-dialog .modal-footer button {
-  min-width: 100px;
-}

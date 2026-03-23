@@ -1,3 +1,9 @@
+<style scoped>
+  caption button,
+  .modal-dialog .modal-footer button {
+    min-width: 100px;
+  }
+</style>
 <template>
   <div class="d-flex align-items-center 
               justify-content-between flex-wrap gap-2 mb-3">

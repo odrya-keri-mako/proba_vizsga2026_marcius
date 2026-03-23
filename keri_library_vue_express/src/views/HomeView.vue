@@ -1,3 +1,26 @@
+<style scoped>
+  .parallax {
+    min-height: 600px; 
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .parallax-content {
+    color: white !important;
+    opacity: 0;
+    transform: translateX(0);
+    transition: transform 600ms ease, 
+                opacity 300ms ease;
+    will-change: transform, opacity;
+  }
+  .parallax-content.from-left  { transform: translateX(-300px); }
+  .parallax-content.from-right { transform: translateX( 300px); }
+  .parallax-content.show {
+    opacity: 1;
+    transform: translateX(0);
+  }
+</style>
 <template>
   <div class="p-4 p-md-5 bg-light border rounded-3">
     <h1 class="h3 fw-semibold mb-2">
