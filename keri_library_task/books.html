@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KERI könyvtár</title>
   <link rel="icon" type="image/png" href="./assets/image/logos/library.png"/>
-  <link rel="stylesheet" href="../components/bootstrap/5.3.8/css/bootstrap.min.css">
-	<link rel="stylesheet" href="../components/font-awesome/7.0.1/css/all.min.css">
+  <link rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/css/bootstrap.min.css">
+  <link rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
   <link rel="stylesheet" href="./css/app.css">
   <style>
     caption button,
@@ -175,6 +177,7 @@
               <thead class="table-dark">
                 <tr>
                   <th class="text-center">#</th>
+                  <th class="text-center">Azon.</th>
                   <th>Név</th>
                   <th>Műfaj</th>
                   <th>Szerző</th>
@@ -572,7 +575,8 @@
     </div>
   </div>
 
-  <scrip src="../components/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.bundle.min.js">
+  </script>
   <script src="./js/common.js"></script>
   <script>
 
@@ -599,6 +603,9 @@
 
       // Setting signal to see if there is a suitable element
       let isEmty = true;
+
+      // Set index
+      let index = 0;
 
       // Each books
       books.forEach(book => {
@@ -632,7 +639,8 @@
           let tr = document.createElement('tr');
           tr.classList.add('align-middle');
           tr.innerHTML =
-            `<td class="text-end">${book.id}</td>
+             `<td class="text-end">${++index}</td>
+              <td class="text-end">${book.id}</td>
               <td>${book.name}</td>
               <td>${genre.name}</td>
               <td>${book.author}</td>
@@ -668,7 +676,7 @@
       if (isEmty) {
         tbody.innerHTML = 
            `<tr>
-              <td colspan="6" class="text-center">Üres</td>
+              <td colspan="7" class="text-center">Üres</td>
             </tr>`;
       }
     }
