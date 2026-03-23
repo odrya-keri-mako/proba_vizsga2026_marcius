@@ -91,7 +91,7 @@
 **/*.arj
 
 ############################################################
-# common, components folder
+# Root common and components folder
 ############################################################
-**/common/
-**/components/
+/common/
+/components/
