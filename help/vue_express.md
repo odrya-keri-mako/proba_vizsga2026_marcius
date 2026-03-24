@@ -9,7 +9,6 @@ npm create vite@latest root_project_name -- --template vue
 cd root_project_name
 npm i
 npm i vue-router@4 axios
-npm i bootstrap @fortawesome/fontawesome-free
 ```
 
 ### 1.2) Install Bootstrap + Font Awesome frameworks
@@ -82,16 +81,22 @@ export const api = axios.create({
 **root_project_name/src/App.vue**
 ```vue
 <template>
+
+  <!-- Application container -->
   <div class="app-container position-relative d-flex flex-column 
               vh-100 overflow-x-hidden overflow-y-auto">
+
+    <!-- Header component -->
     <header class="sticky-top">
       <AppHeader />
     </header>
 
+    <!-- Main -->
     <main class="position-relative flex-fill">
       <RouterView />
     </main>
 
+    <!-- Footer component -->
     <footer>
       <AppFooter />
     </footer>
