@@ -1,9 +1,8 @@
 <?php
 declare(strict_types=1);
 
-// Include environment and hepler
+// Include environment
 require_once("../../common/php/environment.php");
-require_once("./php/helper.php");
 
 // Get arguments
 $args = Util::getArgs();
@@ -30,8 +29,22 @@ if (!$result['affectedRows']) {
   Util::setError('Nem sikerült törölni a könyvet!');
 }
 
-// Get books
-$result = getBooks($db);
+// Set query
+$query = "
+  SELECT  `books`.`id`,
+          `books`.`name`,
+          `books`.`genre_id`,
+          `genres`.`name` AS `genre_name`,
+          `books`.`author`,
+          `books`.`publicated`,
+          `books`.`description`
+    FROM  `books`
+    INNER JOIN `genres`
+    ON `genres`.`id` = `books`.`genre_id`
+    WHERE  `books`.`valid` = 1;";
+
+// Execute SQL command, and return result
+$result = $db->execute($query);
 
 // Close connection
 $db = null;
