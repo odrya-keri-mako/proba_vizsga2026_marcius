@@ -7,18 +7,26 @@ require_once("../../common/php/environment.php");
 // Get arguments (data)
 $args = Util::getArgs();
 
-// Validate arguments
-validate($args);
-
 // Connect to MySQL server
 $db = new Database();
 
-// Check book already exist
-if (isBookExist($db, [
-      "name" => $args['name'],
-      "author" => $args['author'],
-      "publicated" => $args['publicated'],
-    ])) {
+// Set query
+$query = "
+  SELECT  `id`
+    FROM  `books`
+    WHERE `name` = :name AND
+          `author` = :author AND 
+          `publicated` = :publicated";
+
+// Execute SQL command
+$result = $db->execute($query, [
+            "name" => $args['name'],
+            "author" => $args['author'],
+            "publicated" => $args['publicated'],
+          ]);
+
+// Check result
+if (!is_null($result)) {
 
   // Close connection
   $db = null;
@@ -28,10 +36,13 @@ if (isBookExist($db, [
 }
 
 // Set query
-$query = $db->preparateInsert('books', array_keys($args));
+$query = "INSERT INTO `books` 
+          (`name`,`genre_id`,`author`,`publicated`,`description`) 
+          VALUES 
+          (:name, :genre_id, :author, :publicated, :description);";
 
 // Execute SQL command
-$result = $db->execute($query, array_values($args));
+$result = $db->execute($query, $args);
 
 // Check success
 if (!$result['affectedRows']) {

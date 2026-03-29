@@ -7,19 +7,28 @@ require_once("../../common/php/environment.php");
 // Get arguments (data)
 $args = Util::getArgs();
 
-// Validate arguments
-validate($args);
-
 // Connect to MySQL server
 $db = new Database();
 
-// Check book already exist
-if (isBookExist($db, [
-      "name" => $args['name'],
-      "author" => $args['author'],
-      "publicated" => $args['publicated'],
-      "id" => $args['id'],
-    ])) {
+// Set query
+$query = "
+  SELECT  `id`
+    FROM  `books`
+    WHERE `name` = :name AND
+          `author` = :author AND 
+          `publicated` = :publicated AND
+          `id` != :id";
+
+// Execute SQL command
+$result = $db->execute($query, [
+            "name" => $args['name'],
+            "author" => $args['author'],
+            "publicated" => $args['publicated'],
+            "id" => $args['id'],
+          ]);
+
+// Check result
+if (!is_null($result)) {
 
   // Close connection
   $db = null;
@@ -29,8 +38,13 @@ if (isBookExist($db, [
 }
 
 // Set query
-$query  = $db->preparateUpdate('books', array_keys($args), 'id');
-$query .= " WHERE `id` = :id;";
+$query = "UPDATE `books` 
+          SET `name` = :name, 
+              `genre_id` = :genre_id, 
+              `author` = :author, 
+              `publicated` = :publicated, 
+              `description` = :description 
+        WHERE `id` = :id;";
 
 // Execute SQL command
 $result = $db->execute($query, $args);

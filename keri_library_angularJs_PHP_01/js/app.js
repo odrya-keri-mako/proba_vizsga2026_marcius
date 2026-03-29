@@ -59,10 +59,8 @@
   // Application run
   .run([
     '$rootScope',
-    '$transitions',
-    '$timeout',
     'http',
-    function($rootScope, $transitions, $timeout, http) {
+    function($rootScope, http) {
 
       // Get last choice theme
       $rootScope.theme = localStorage.getItem('keri_library_theme') ?? 'dark';
@@ -81,28 +79,16 @@
       })
       .catch(e => alert(e));
 
-      // Event on transitions success
-      $transitions.onSuccess({}, (transition) => {
-
-        // Set current state identifier
-        $rootScope.stateId = transition.to().name;
-
-        // Reset asynchronous
-        $timeout(() => {
-
-          // Set bootstrap tooltips
-          let tooltips = document.querySelectorAll(
-              '[data-bs-toggle="tooltip"]:not(.tooltip-set)');
-          [...tooltips].map(e => {
-            e.classList.add('tooltip-set');
-            new bootstrap.Tooltip(e);
-          });
-
-          // Scroll to top
-          $rootScope.scrollToTop();
-        }, 100);
-      });
-
+      // Set bootstrap tooltips
+      $rootScope.setToolsTip = () => {
+        let tooltips = document.querySelectorAll(
+            '[data-bs-toggle="tooltip"]:not(.tooltip-set)');
+        [...tooltips].map(e => {
+          e.classList.add('tooltip-set');
+          new bootstrap.Tooltip(e);
+        });
+      };
+        
       // Scroll to top
       $rootScope.scrollToTop = () => {
         let appContainer = document.querySelector('.app-container');
@@ -118,9 +104,13 @@
   .controller('homeController', [
     '$rootScope',
     '$scope',
+    '$state',
     '$timeout',
-    function($rootScope, $scope, $timeout) {
+    function($rootScope, $scope, $state, $timeout) {
       
+      // Set current state identifier
+      $rootScope.stateId = $state.current.name;
+
       // Reset asynchronous
       $timeout(() => {
 
@@ -129,6 +119,13 @@
             [...$rootScope.data.books].sort(() => 0.5 - Math.random())
                                       .slice(0, 6);
         $scope.$applyAsync();
+
+        // Set bootstrap tooltips
+        $rootScope.setToolsTip();
+
+        // Scroll to top
+        $rootScope.scrollToTop();
+
       }, 300);
 
       // Initial intersection observer for parallax content
@@ -153,9 +150,24 @@
   .controller('booksController', [
     '$rootScope',
     '$scope',
+    '$state',
     '$timeout',
     'http',
-    function($rootScope, $scope, $timeout, http) {
+    function($rootScope, $scope, $state, $timeout, http) {
+
+      // Set current state identifier
+      $rootScope.stateId = $state.current.name;
+
+      // Reset asynchronous
+      $timeout(() => {
+
+        // Set bootstrap tooltips
+        $rootScope.setToolsTip();
+
+        // Scroll to top
+        $rootScope.scrollToTop();
+
+      }, 300);
 
       // Get-/Set modal properties
       let modalElement  = document.querySelector('#bookModal'),
