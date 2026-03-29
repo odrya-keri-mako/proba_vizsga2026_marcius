@@ -8,7 +8,7 @@ require_once("./php/helper.php");
 // Get arguments
 $args = Util::getArgs();
 
-// Validate arguments
+// Validate arguments (NEM KÖTELEZŐ)
 validate($args);
 
 // Connect to MySQL server

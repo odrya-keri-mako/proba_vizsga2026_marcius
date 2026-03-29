@@ -7,7 +7,7 @@ require_once("../../common/php/environment.php");
 // Get arguments (data)
 $args = Util::getArgs();
 
-// Validate arguments
+// Validate arguments (NEM KÖTELEZŐ)
 Helper::validate($args);
 
 // Connect to MySQL server

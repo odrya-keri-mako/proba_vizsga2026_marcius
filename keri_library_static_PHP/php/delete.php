@@ -7,9 +7,6 @@ require_once("../../common/php/environment.php");
 // Get arguments
 $args = Util::getArgs();
 
-// Validate arguments
-validate($args);
-
 // Connect to MySQL server
 $db = new Database();
 
