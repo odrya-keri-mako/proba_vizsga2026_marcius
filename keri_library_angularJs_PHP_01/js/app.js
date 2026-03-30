@@ -65,6 +65,12 @@
       // Get last choice theme
       $rootScope.theme = localStorage.getItem('keri_library_theme') ?? 'dark';
 
+      // Set data for books and genres
+      $rootScope.data = {
+        books: [],
+        genres: []
+      };
+
       // Set model for filter
       $rootScope.filter = {
         search: '',

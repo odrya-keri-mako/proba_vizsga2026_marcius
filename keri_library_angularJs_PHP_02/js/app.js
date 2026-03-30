@@ -76,6 +76,12 @@
     'http',
     function($rootScope, $transitions, $timeout, $css, http) {
 
+      // Set data for books and genres
+      $rootScope.data = {
+        books: [],
+        genres: []
+      };
+      
       // Set model for filter
       $rootScope.filter = {
         search: '',
