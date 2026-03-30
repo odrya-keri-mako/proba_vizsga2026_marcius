@@ -97,7 +97,7 @@
 
       // Delete
       $scope.delete = (id, name) => {
-        if (confirm(`${name}\nBizrossan törli a könyvet a kínálatból?`)) {
+        if (confirm(`${name}\nBiztossan törli a könyvet a kínálatból?`)) {
           let args = {id: id};
           http.request({
             url:'./php/delete.php',

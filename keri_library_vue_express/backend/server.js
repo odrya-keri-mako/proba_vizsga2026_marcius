@@ -131,7 +131,7 @@ app.delete("/api/books/:id", async (req, res) => {
     return setError(res, "Hibás könyv azonosító!");
 
   try {
-    const affected = await deleteBook(id);
+    const affected = await deleteBook({ id });
     if (!affected) return setError(res, "Nem sikerült törölni a könyvet!");
 
     res.json(await getBooks());

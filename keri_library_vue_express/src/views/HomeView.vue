@@ -41,7 +41,7 @@
   <div class="container-fluid parallax position-relative"
       style="background-image: url('/src/assets/image/paralax/paralax_01.jpg');">
     <h5 class="display-5 position-absolute p-3 rounded
-              bg-dark-transparent parallax-content from-right"
+               bg-dark-transparent parallax-content from-right"
         style="top:100px;right:50px;">
       Könyvtár, ahol a kíváncsiság otthon van.
     </h5>
@@ -55,11 +55,11 @@
     <div class="row recommendation py-5 g-4
                 row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
       <div v-for="b in recommend" 
-          class="col">
+           class="col">
         <div class="card h-100 shadow-sm-bottom-end">
           <img v-bind:src="'/src/assets/image/coveres/genre-' + 
                             String(b.genre_id).padStart(2,'0') + '.png'" 
-              class="card-img-top" alt="genre">
+               class="card-img-top" alt="genre">
           <div class="card-body">
             <h4 class="card-title">{{ b.name }}</h4>
             <p class="mb-0">{{ b.author }}</p>
@@ -73,9 +73,9 @@
 
   <!-- Paralax image -->
   <div class="container-fluid parallax position-relative"
-      style="background-image: url('/src/assets/image/paralax/paralax_02.jpg');">
+       style="background-image: url('/src/assets/image/paralax/paralax_02.jpg');">
     <h5 class="display-5 position-absolute p-3 rounded 
-              bg-dark-transparent parallax-content from-left"
+               bg-dark-transparent parallax-content from-left"
         style="bottom:250px;left:50px;">
       Olvass ma, a jobb holnapért.
     </h5>
@@ -86,7 +86,7 @@
     <div class="row align-items-center py-5 g-4">
 
       <!-- Information -->
-      <div class="col">
+      <div class="col-lg-8">
         <h2 class="mb-4">Könyvtárhasználati tudnivalók</h2>
         <h4>Aktuális könyvtárhasználati információk</h4>
         <p>
@@ -111,7 +111,7 @@
       </div>
       
       <!-- Opening hours -->
-      <div class="col">
+      <div class="col-lg-4">
         <div class="card shadow-sm">
           <div class="card-body">
             <h2 class="h5 fw-semibold mb-3">Nyitvatartás:</h2>
@@ -154,9 +154,9 @@
 
   <!-- Paralax image -->
   <div class="container-fluid parallax position-relative"
-      style="background-image: url('/src/assets/image/paralax/paralax_03.jpg');">
+       style="background-image: url('/src/assets/image/paralax/paralax_03.jpg');">
     <h5 class="display-5 position-absolute p-3 rounded
-              bg-dark-transparent parallax-content from-right"
+               bg-dark-transparent parallax-content from-right"
         style="top:100px;right:50px;">
       Könyvek, amik veled maradnak.
     </h5>
@@ -164,40 +164,65 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
-import { api } from "../services/api";
+import { onMounted, onBeforeUnmount, ref, watch, nextTick } from "vue";
+import { libraryStore } from "../stores/libraryStore";
 
-const data = ref({ books: [], genres: [] });
+// Set recommendation list
 const recommend = ref([]);
 
+// Get random books
 function pickRandom(list, n) {
   const copy = [...list];
   copy.sort(() => 0.5 - Math.random());
   return copy.slice(0, n);
 }
 
-onMounted(async () => {
-  const r = await api.get("/api/init");
-  data.value = r.data;
-  recommend.value = pickRandom(data.value.books, 6);
-});
-
 // Initial intersection observer for parallax content
+let io = null;
 function initParallaxTextAnimations() {
-  let items = document.querySelectorAll('.parallax-content');
-  let io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting)
-            entry.target.classList.add('show');
-      else  entry.target.classList.remove('show'); 
+  const items = document.querySelectorAll(".parallax-content");
+
+  // ha már volt observer, bontsuk
+  if (io) io.disconnect();
+
+  io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) entry.target.classList.add("show");
+      else entry.target.classList.remove("show");
     });
-  });
-  items.forEach(el => io.observe(el));
+  }, { threshold: 0.15 });
+
+  items.forEach((el) => io.observe(el));
 }
 
-// Initial intersection observer for parallax content
-setTimeout(() => {  
+// Watch books in store
+watch(
+  () => libraryStore.books,
+  (books) => {
+    if (Array.isArray(books) && books.length > 0) {
+      recommend.value = pickRandom(books, 6);
+    }
+  },
+  { immediate: true }
+);
+
+// On mounted
+onMounted(async () => {
+
+  // Load initial data
+  await libraryStore.initOnce();
+
+  // Scroll to top
+  libraryStore.scrollToTop();
+  
+  // Initial intersection observer for parallax content
+  await nextTick();
   initParallaxTextAnimations();
-}, 300);
+});
+
+// On before unmount
+onBeforeUnmount(() => {
+  if (io) io.disconnect();
+});
 
 </script>

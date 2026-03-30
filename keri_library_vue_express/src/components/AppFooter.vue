@@ -121,6 +121,16 @@
   </div>
 </template>
 <script setup>
+  import { onMounted } from "vue";
   import { RouterLink } from "vue-router";
+  import { libraryStore } from "../stores/libraryStore";
+  
   const currentYear = (new Date()).getFullYear();
+
+  // On mounted
+  onMounted(() => {
+
+    // Set bootstrap tooltips
+    libraryStore.setBsTooltips();
+  });
 </script>

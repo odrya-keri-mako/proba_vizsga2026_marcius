@@ -80,7 +80,7 @@
       .catch(e => alert(e));
 
       // Set bootstrap tooltips
-      $rootScope.setToolsTip = () => {
+      $rootScope.setBsTooltips = () => {
         let tooltips = document.querySelectorAll(
             '[data-bs-toggle="tooltip"]:not(.tooltip-set)');
         [...tooltips].map(e => {
@@ -121,7 +121,7 @@
         $scope.$applyAsync();
 
         // Set bootstrap tooltips
-        $rootScope.setToolsTip();
+        $rootScope.setBsTooltips();
 
         // Scroll to top
         $rootScope.scrollToTop();
@@ -162,7 +162,7 @@
       $timeout(() => {
 
         // Set bootstrap tooltips
-        $rootScope.setToolsTip();
+        $rootScope.setBsTooltips();
 
         // Scroll to top
         $rootScope.scrollToTop();
@@ -254,7 +254,7 @@
 
       // Delete
       $scope.delete = (id, name) => {
-        if (confirm(`${name}\nBizrossan törli a könyvet a kínálatból?`)) {
+        if (confirm(`${name}\nBiztossan törli a könyvet a kínálatból?`)) {
           let args = {id: id};
           http.request({
             url:'./php/delete.php',

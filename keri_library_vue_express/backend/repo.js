@@ -77,10 +77,8 @@ export async function updateBook({
 }
 
 // DELETE
-export async function deleteBook(id) {
-  const [result] = await pool.query(
-    "DELETE FROM books WHERE id = ?",
-    [id]
-  );
+export async function deleteBook({ id }) {
+  const sql = `DELETE FROM books WHERE id = :id`;
+  const [result] = await pool.query({ sql, namedPlaceholders: true }, { id });
   return result.affectedRows;
 }

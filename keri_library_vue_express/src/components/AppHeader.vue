@@ -5,7 +5,7 @@
       <!-- Logo -->
       <a class="navbar-brand p-0 me-1" 
           href="#"
-          @click.prevent="scrollToTop">
+          @click.prevent="libraryStore.scrollToTop()">
         <img  src="../assets/image/logos/library.png"
               class="me-1" 
               height="40" 
@@ -130,7 +130,6 @@
 <script setup>
 import { RouterLink, useRoute } from "vue-router";
 import { computed, onMounted, ref } from "vue";
-import { Tooltip } from "bootstrap";
 import { libraryStore } from "../stores/libraryStore";
 
 // route
@@ -150,18 +149,14 @@ const toggleTheme = () => {
   setTheme();
 };
 
-// ⬇️ közös filter a store-ból
+// Set filter from store
 const filter = libraryStore.filter;
 
-function scrollToTop() {
-  const appContainer = document.querySelector(".app-container");
-  if (appContainer) appContainer.scrollTo(0, 0);
-}
-
+// On mounted
 onMounted(() => {
-  document
-    .querySelectorAll('[data-bs-toggle="tooltip"]')
-    .forEach((el) => new Tooltip(el));
+
+  // Set bootstrap tooltips
+  libraryStore.setBsTooltips();
 });
 
 // Show/Hide breakpoints

@@ -108,17 +108,22 @@
         $timeout(() => {
 
           // Set bootstrap tooltips
-          let tooltips = document.querySelectorAll(
-              '[data-bs-toggle="tooltip"]:not(.tooltip-set)');
-          [...tooltips].map(e => {
-            e.classList.add('tooltip-set');
-            new bootstrap.Tooltip(e);
-          });
+          $rootScope.setBsTooltips();
 
           // Scroll to top
           $rootScope.scrollToTop();
         }, 100);
       });
+
+      // Set bootstrap tooltips
+      $rootScope.setBsTooltips = () => {
+        let tooltips = document.querySelectorAll(
+            '[data-bs-toggle="tooltip"]:not(.tooltip-set)');
+        [...tooltips].map(e => {
+          e.classList.add('tooltip-set');
+          new bootstrap.Tooltip(e);
+        });
+      };
 
       // Scroll to top
       $rootScope.scrollToTop = () => {

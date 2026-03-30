@@ -9,12 +9,12 @@
 
         <!-- Caption -->
         <caption class="caption-top bg-dark-subtle">
-          <div class="d-flex justify-content-between">
+          <div class="d-flex align-items-center">
             <h4 class="mb-0 p-2">
               <i class="fa-solid fa-book me-1"></i>
               KINÁLATUNK
             </h4>
-            <button class="btn btn-sm me-3 my-1 btn-primary"
+            <button class="btn btn-sm ms-5 me-3 btn-primary"
                     ng-click="openModal(null, 'new')">
               <i class="fa-solid fa-circle-plus"></i>
               Felvétel
@@ -291,7 +291,7 @@
                    id="name" 
                    name="name"
                    ng-model="model.name"
-                   ng-pattern="/^(?=(?:.*[^ ]){2,}).*$/"
+                   pattern="^(?=(?:.*[^ ]){2,}).*$"
                    required
                    ng-disabled="modalType === 'details'">
           </div>
@@ -331,7 +331,7 @@
                    id="author"
                    name="author"
                    ng-model="model.author"
-                   ng-pattern="/^(?=(?:.*[^ ]){2,}).*$/"
+                   pattern="^(?=(?:.*[^ ]){2,}).*$"
                    required
                    ng-disabled="modalType === 'details'">
           </div>
@@ -350,7 +350,7 @@
                      id="publicated"
                      name="publicated"
                      ng-model="model.publicated" 
-                     ng-pattern="/^[1-9][0-9]{3}$/"
+                     pattern="^[1-9][0-9]{3}$"
                      maxlength="4" 
                      required
                      placeholder="kiadva"
@@ -360,7 +360,7 @@
           </div>
 
           <!-- Description -->
-          <div class="mb-3">
+          <div class="mb-4">
             <label for="description" 
                    class="form-label">
               Leírás:
@@ -372,43 +372,43 @@
                       id="description"
                       name="description"
                       ng-model="model.description"
-                      ng-pattern="/^(?=(?:.*[^ ]){2,}).*$/" 
+                      pattern="^(?=(?:.*[^ ]){2,}).*$" 
                       rows="3" 
                       required
                       ng-disabled="modalType === 'details'">
             </textarea>
           </div>
+
+          <!-- Buttons -->
+          <div class="mb-3 text-end">
+
+            <!-- Cancel -->
+            <button type="button" 
+                    class="btn btn-secondary mx-1" 
+                    data-bs-dismiss="modal"
+                    ng-switch="modalType">
+              <i class="fa-solid fa-circle-xmark"></i>
+              <span ng-switch-when="details">
+                Bezár
+              </span>
+              <span ng-switch-default>
+                Mégsem
+              </span>
+            </button>
+            
+            <!-- Save -->
+            <button id="btn-save"
+                    type="button" 
+                    class="btn btn-primary mx-1"
+                    data-bs-dismiss="modal"
+                    ng-disabled="bookForm.$invalid"
+                    ng-click="modalType === 'new' ? post(model) : put(model)"
+                    ng-if="modalType !== 'details'">
+              <i class="fa-solid fa-floppy-disk"></i>
+              Mentés
+            </button>
+          </div>
         </form>
-      </div>
-
-      <!-- Buttons -->
-      <div class="modal-footer">
-
-        <!-- Ok/Cancel -->
-        <button type="button" 
-                class="btn btn-secondary mx-1" 
-                data-bs-dismiss="modal"
-                ng-switch="modalType">
-          <i class="fa-solid fa-circle-xmark"></i>
-          <span ng-switch-when="details">
-            Bezár
-          </span>
-          <span ng-switch-default>
-            Mégsem
-          </span>
-        </button>
-        
-        <!-- Save -->
-        <button id="btn-save"
-                type="button" 
-                class="btn btn-primary mx-1"
-                data-bs-dismiss="modal"
-                ng-disabled="bookForm.$invalid"
-                ng-click="modalType === 'new' ? post(model) : put(model)"
-                ng-if="modalType !== 'details'">
-          <i class="fa-solid fa-floppy-disk"></i>
-          Mentés
-        </button>
       </div>
     </div>
   </div>

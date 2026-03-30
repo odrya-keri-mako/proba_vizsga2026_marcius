@@ -160,12 +160,12 @@
 
               <!-- Caption -->
               <caption class="bg-dark-subtle">
-                <div class="d-flex justify-content-between">
+                <div class="d-flex align-items-center">
                   <h4 class="mb-0 p-2">
                     <i class="fa-solid fa-book me-1"></i>
                     KINÁLATUNK
                   </h4>
-                  <button class="btn btn-sm me-3 my-1 btn-primary"
+                  <button class="btn btn-sm ms-5 me-3 btn-primary"
                           onclick="openModal(0, 'new')">
                     <i class="fa-solid fa-circle-plus"></i>
                     Felvétel
@@ -481,7 +481,8 @@
                        spellcheck="false"
                        placeholder="név"
                        id="name" 
-                       required>
+                       required
+                       pattern="^(?=(?:.*[^ ]){2,}).*$">
               </div>
 
               <!-- Genre -->
@@ -508,7 +509,8 @@
                        spellcheck="false"
                        placeholder="szerző"
                        id="author" 
-                       required>
+                       required
+                       pattern="^(?=(?:.*[^ ]){2,}).*$">
               </div>
 
               <!-- Publicated -->
@@ -523,7 +525,7 @@
                          autocomplete="off" 
                          spellcheck="false" 
                          id="publicated"
-                         pattern="/^[1-9][0-9]{3}$/"
+                         pattern="^[1-9][0-9]{3}$"
                          maxlength="4" 
                          required
                          placeholder="kiadva"
@@ -532,7 +534,7 @@
               </div>
 
               <!-- Description -->
-              <div class="mb-3">
+              <div class="mb-4">
                 <label for="description" 
                        class="form-label">
                   Leírás:
@@ -543,32 +545,33 @@
                           placeholder="Leírás" 
                           id="description"
                           rows="3" 
-                          required>
+                          required
+                          pattern="^(?=(?:.*[^ ]){2,}).*$">
                 </textarea>
               </div>
+
+              <!-- Buttons -->
+              <div class="mb-3 text-end">
+
+                <!-- Cancel -->
+                <button type="button" 
+                        class="btn btn-secondary mx-1" 
+                        data-bs-dismiss="modal">
+                  <i class="fa-solid fa-circle-xmark"></i>
+                  <span id="btn-cancel"></span>
+                </button>
+
+                <!-- Save -->
+                <button id="btn-save"
+                        type="button" 
+                        class="btn btn-primary mx-1"
+                        data-bs-dismiss="modal"
+                        onclick="saveBook()">
+                  <i class="fa-solid fa-floppy-disk"></i>
+                  Mentés
+                </button>
+              </div>
             </form>
-          </div>
-
-          <!-- Buttons -->
-          <div class="modal-footer">
-
-            <!-- Cancel -->
-            <button type="button" 
-                    class="btn btn-secondary mx-1" 
-                    data-bs-dismiss="modal">
-              <i class="fa-solid fa-circle-xmark"></i>
-              <span id="btn-cancel"></span>
-            </button>
-
-            <!-- Save -->
-            <button id="btn-save"
-                    type="button" 
-                    class="btn btn-primary mx-1"
-                    data-bs-dismiss="modal"
-                    onclick="saveBook()">
-              <i class="fa-solid fa-floppy-disk"></i>
-              Mentés
-            </button>
           </div>
         </div>
       </div>
