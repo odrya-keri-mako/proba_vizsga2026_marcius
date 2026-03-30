@@ -70,7 +70,13 @@ function scrollToTop() {
 }
 
 // Set bootstrap tooltips
-setTimeout(() => {
-  let tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-  [...tooltips].map(e => new bootstrap.Tooltip(e));
-}, 600);
+function setBsTooltips() {
+  setTimeout(() => {
+    let tooltips = document.querySelectorAll( 
+                      '[data-bs-toggle="tooltip"]:not(.tooltip-set)');
+    [...tooltips].map(e => {
+      e.classList.add('tooltip-set');
+      new bootstrap.Tooltip(e);
+    });
+  }, 600);
+}

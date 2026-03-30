@@ -700,7 +700,7 @@
           `<tr>
               <td colspan="7" class="text-center">Üres</td>
             </tr>`;
-      }
+      } else setBsTooltips();
     }
 
     // Delete book
@@ -883,6 +883,8 @@
           document.activeElement.blur();
     });
 
+    // Set bootstrap tooltips
+    setBsTooltips();
   </script>
 </body>
 </html>

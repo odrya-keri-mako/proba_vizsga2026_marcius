@@ -229,6 +229,10 @@
           $rootScope.data.books = r;
           $rootScope.$applyAsync();
           $timeout(() => {
+
+            // Set bootstrap tooltips
+            $rootScope.setBsTooltips();
+            
             alert('A könyvet sikerült felvenni!');
           }, 100);
         })
