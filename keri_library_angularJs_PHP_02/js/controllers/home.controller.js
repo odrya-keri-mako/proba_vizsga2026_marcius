@@ -23,11 +23,16 @@
       // Reset asynchronous
       $timeout(() => {
 
-        // Show recommend books
-        $scope.recommendBooks = 
-            [...$rootScope.data.books].sort(() => 0.5 - Math.random())
-                                      .slice(0, 6);
-        $scope.$applyAsync();
+        // Check books exist
+        if (Array.isArray($rootScope.data.books) && 
+                          $rootScope.data.books.length > 0) {
+
+          // Set recommend books
+          $scope.recommendBooks = 
+              [...$rootScope.data.books].sort(() => 0.5 - Math.random())
+                                        .slice(0, 6);
+          $scope.$applyAsync();
+        }
       }, 300);
 
       // Initial intersection observer for parallax content

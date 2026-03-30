@@ -399,29 +399,33 @@
       genres  = response.genres; 
       books   = response.books;
 
-      // Show recommendation
+      // Set recommendation
       let recommended = document.querySelector('.row.recommendation'),
-          randomBooks = [...books].sort(() => 0.5 - Math.random()).slice(0, 6);
-      randomBooks.forEach(book => {
-        let col   = document.createElement('div'),
-            genre = genres.find(item => item.id === book.genre_id),
-            imgNo = String(genre.id).padStart(2, '0');
-        
-        col.classList.add('col');
-        col.innerHTML = 
-          `<div class="card h-100 shadow-sm-bottom-end">
-              <img src="./assets/image/coveres/genre-${imgNo}.png" 
-                  class="card-img-top" alt="...">
-              <div class="card-body">
-                <h4 class="card-title">${book.name}</h4>
-                <p class="mb-0">${book.author}</p>
-                <p class="mb-0">${book.publicated}</p>
-                <p class="mb-0">${genre.name}</p>
-              </div>
-            </div>`;
-        recommended.append(col);
-      });
-
+          randomBooks = [];
+      
+      // Check books exist
+      if (Array.isArray(books) && books.length > 0) {
+        randomBooks = [...books].sort(() => 0.5 - Math.random()).slice(0, 6);
+        randomBooks.forEach(book => {
+          let col   = document.createElement('div'),
+              genre = genres.find(item => item.id === book.genre_id),
+              imgNo = String(genre.id).padStart(2, '0');
+          
+          col.classList.add('col');
+          col.innerHTML = 
+            `<div class="card h-100 shadow-sm-bottom-end">
+                <img src="./assets/image/coveres/genre-${imgNo}.png" 
+                    class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h4 class="card-title">${book.name}</h4>
+                  <p class="mb-0">${book.author}</p>
+                  <p class="mb-0">${book.publicated}</p>
+                  <p class="mb-0">${genre.name}</p>
+                </div>
+              </div>`;
+          recommended.append(col);
+        });
+      }
     })
     .catch(e => alert(e));
 
