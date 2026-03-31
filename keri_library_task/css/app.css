@@ -21,7 +21,3 @@ body[data-bs-theme="light"] .nav-item:hover {
 .bg-dark-transparent {
   background-color:rgba(0,0,0,.3);
 }
-caption button,
-.modal-dialog button {
-  min-width: 100px;
-}
