@@ -464,7 +464,8 @@
                   <input type="number" 
                          class="form-control form-control-sm"
                          autocomplete="off" 
-                         id="id" 
+                         id="id"
+                         name="id" 
                          disabled
                          style="width: 100px;">
                 </div>
@@ -481,7 +482,8 @@
                        autocomplete="off" 
                        spellcheck="false"
                        placeholder="név"
-                       id="name" 
+                       id="name"
+                       name="name" 
                        required
                        pattern="^(?=(?:.*[^ ]){2,}).*$">
               </div>
@@ -493,7 +495,8 @@
                   Műfaj:
                 </label>
                 <select class="form-select form-select-sm" 
-                        id="genre_id" 
+                        id="genre_id"
+                        name="genre_id" 
                         required>
                 </select>
               </div>
@@ -509,7 +512,8 @@
                        autocomplete="off"
                        spellcheck="false"
                        placeholder="szerző"
-                       id="author" 
+                       id="author"
+                       name="author" 
                        required
                        pattern="^(?=(?:.*[^ ]){2,}).*$">
               </div>
@@ -526,6 +530,7 @@
                          autocomplete="off" 
                          spellcheck="false" 
                          id="publicated"
+                         name="publicated"
                          pattern="^[1-9][0-9]{3}$"
                          maxlength="4" 
                          required
@@ -545,6 +550,7 @@
                           spellcheck="false"
                           placeholder="Leírás" 
                           id="description"
+                          name="description"
                           rows="3" 
                           required
                           pattern="^(?=(?:.*[^ ]){2,}).*$">

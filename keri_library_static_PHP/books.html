@@ -480,6 +480,7 @@
                        spellcheck="false"
                        placeholder="név"
                        id="name" 
+                       name="name"
                        required
                        pattern="^(?=(?:.*[^ ]){2,}).*$"
                        oninput="inputChanged()">
@@ -493,6 +494,7 @@
                 </label>
                 <select class="form-select form-select-sm" 
                         id="genre_id" 
+                        name="genre_id"
                         required
                         oninput="inputChanged()">
                 </select>
@@ -510,6 +512,7 @@
                        spellcheck="false"
                        placeholder="szerző"
                        id="author" 
+                       name="author"
                        required
                        pattern="^(?=(?:.*[^ ]){2,}).*$"
                        oninput="inputChanged()">
@@ -527,6 +530,7 @@
                          autocomplete="off" 
                          spellcheck="false" 
                          id="publicated"
+                         name="publicated"
                          pattern="^[1-9][0-9]{3}$"
                          maxlength="4" 
                          required
@@ -547,6 +551,7 @@
                           spellcheck="false"
                           placeholder="Leírás" 
                           id="description"
+                          name="description"
                           rows="3" 
                           required
                           pattern="^(?=(?:.*[^ ]){2,}).*$"
