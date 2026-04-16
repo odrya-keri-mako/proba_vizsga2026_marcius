@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2026. Már 17. 21:36
+-- Létrehozás ideje: 2026. Ápr 16. 20:29
 -- Kiszolgáló verziója: 10.4.32-MariaDB
 -- PHP verzió: 8.2.12
 
@@ -37,7 +37,7 @@ CREATE TABLE `books` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `modified_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
   `valid` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- A tábla adatainak kiíratása `books`
@@ -80,7 +80,7 @@ INSERT INTO `books` (`id`, `name`, `genre_id`, `author`, `publicated`, `descript
 CREATE TABLE `genres` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- A tábla adatainak kiíratása `genres`
@@ -100,6 +100,7 @@ INSERT INTO `genres` (`id`, `name`) VALUES
 (11, 'Gazdaság'),
 (12, 'Művészet');
 
+
 --
 -- Indexek a kiírt táblákhoz
 --
@@ -115,7 +116,7 @@ ALTER TABLE `books`
 -- A tábla indexei `genres`
 --
 ALTER TABLE `genres`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
 
 --
 -- A kiírt táblák AUTO_INCREMENT értéke
@@ -125,7 +126,7 @@ ALTER TABLE `genres`
 -- AUTO_INCREMENT a táblához `books`
 --
 ALTER TABLE `books`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT a táblához `genres`

@@ -87,18 +87,18 @@ CREATE TABLE `genres` (
 --
 
 INSERT INTO `genres` (`id`, `name`) VALUES
+(1, 'Szépirodalom'),
+(2, 'Ifjúsági'),
+(3, 'Gyermekkönyv'),
+(4, 'Sci-fi'),
+(5, 'Thriller'),
+(6, 'Romantikus'),
+(7, 'Történelmi'),
+(8, 'Ismeretterjesztő'),
+(9, 'Tankönyv'),
 (10, 'Életmód'),
 (11, 'Gazdaság'),
-(3, 'Gyermekkönyv'),
-(2, 'Ifjúsági'),
-(8, 'Ismeretterjesztő'),
-(12, 'Művészet'),
-(6, 'Romantikus'),
-(4, 'Sci-fi'),
-(1, 'Szépirodalom'),
-(9, 'Tankönyv'),
-(5, 'Thriller'),
-(7, 'Történelmi');
+(12, 'Művészet');
 
 --
 -- Indexek a kiírt táblákhoz
